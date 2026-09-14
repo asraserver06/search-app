@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gourmet Craft — Recipe Search & Discovery</title>
+  <meta name="description" content="Discover delicious recipes powered by TheMealDB API with debounced search, ingredient breakdowns, and favorite bookmarks." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 6.6 7.1.6-5.4 4.7 1.6 6.9-5.7-3.4-5.7 3.4 1.6-6.9-5.4-4.7 7.1-.6z"/></svg>
+        </div>
+        <div>
+          <h1>Gourmet Craft</h1>
+          <span class="badge-vanilla">Vanilla JS Edition</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="favoritesToggleBtn" class="btn btn-fav">
+          <svg class="fav-logo-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l2.9 6.8 7.1.6-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7-5.4-4.8 7.1-.6z"/></svg>
+          Saved Recipes
+          <span id="favCountBadge" class="badge-count">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Search & Filter Controls -->
+    <section class="search-section">
+      <div class="search-box-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Search recipes by name or ingredient (e.g. chicken, pasta, pie)..." autocomplete="off" />
+        <button id="clearSearchBtn" class="btn-icon hidden" title="Clear search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Quick Category Pills -->
+      <div class="category-pills" id="categoryPills">
+        <button class="pill active" data-category="all">All Recipes</button>
+        <button class="pill" data-category="Chicken">Chicken</button>
+        <button class="pill" data-category="Beef">Beef</button>
+        <button class="pill" data-category="Pasta">Pasta</button>
+        <button class="pill" data-category="Seafood">Seafood</button>
+        <button class="pill" data-category="Vegetarian">Vegetarian</button>
+        <button class="pill" data-category="Dessert">Dessert</button>
+        <button class="pill" data-category="Breakfast">Breakfast</button>
+      </div>
+    </section>
+
+    <!-- Search Results Header -->
+    <div class="results-header" id="resultsHeader">
+      <h2 id="resultsTitle">Popular Recipes</h2>
+      <div id="resultsCount" class="results-count">Showing recipes</div>
+    </div>
+
+    <!-- Main Results Grid / Status Container -->
+    <main>
+      <div id="statusMessage" class="status-container hidden"></div>
+      <div id="resultsGrid" class="results-grid"></div>
+    </main>
+
+    <!-- Pagination Footer -->
+    <div id="paginationContainer" class="pagination-container hidden">
+      <div class="page-size-selector">
+        <label for="pageSizeSelect">Items per page:</label>
+        <select id="pageSizeSelect">
+          <option value="6">6</option>
+          <option value="8" selected>8</option>
+          <option value="12">12</option>
+        </select>
+      </div>
+      <div class="pagination-controls" id="paginationControls"></div>
+    </div>
+  </div>
+
+  <!-- Detail Modal Dialog -->
+  <div id="recipeModal" class="modal-backdrop hidden" tabIndex="-1">
+    <div class="modal-container">
+      <button id="modalCloseBtn" class="modal-close-btn" aria-label="Close modal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div id="modalContent" class="modal-body">
+        <!-- Dynamic Content populated via script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Favorites Drawer Panel -->
+  <div id="favoritesDrawer" class="drawer-backdrop hidden">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <h2>Your Saved Favorites</h2>
+        <button id="drawerCloseBtn" class="btn-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="favoritesList" class="drawer-content">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
