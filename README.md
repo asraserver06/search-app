@@ -4,7 +4,7 @@
 
 ## 🚀 Live Demo
 
-🔗 **Live Website:** [https://search-app.netlify.app](https://search-app.netlify.app) *(Replace with your exact Netlify live URL)*
+🔗 **Live Website:** https://gourmetcraft.netlify.app/
 
 ---
 
