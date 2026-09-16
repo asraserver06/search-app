@@ -265,6 +265,19 @@ function renderGrid() {
     .join("");
 }
 
+function getPageWindow(current, total) {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+  if (current <= 4) {
+    return [1, 2, 3, 4, 5, "...", total];
+  }
+  if (current >= total - 3) {
+    return [1, "...", total - 4, total - 3, total - 2, total - 1, total];
+  }
+  return [1, "...", current - 1, current, current + 1, "...", total];
+}
+
 function renderPagination() {
   const totalPages = Math.ceil(state.recipes.length / state.pageSize);
   if (totalPages <= 1) {
@@ -277,11 +290,16 @@ function renderPagination() {
     <button class="page-btn" ${state.currentPage === 1 ? "disabled" : ""} data-page="${state.currentPage - 1}">&larr; Prev</button>
   `;
 
-  for (let i = 1; i <= totalPages; i++) {
-    html += `
-      <button class="page-btn ${state.currentPage === i ? "active" : ""}" data-page="${i}">${i}</button>
-    `;
-  }
+  const pages = getPageWindow(state.currentPage, totalPages);
+  pages.forEach(p => {
+    if (p === "...") {
+      html += `<span class="page-ellipsis">&hellip;</span>`;
+    } else {
+      html += `
+        <button class="page-btn ${state.currentPage === p ? "active" : ""}" data-page="${p}">${p}</button>
+      `;
+    }
+  });
 
   html += `
     <button class="page-btn" ${state.currentPage === totalPages ? "disabled" : ""} data-page="${state.currentPage + 1}">Next &rarr;</button>
@@ -342,7 +360,7 @@ async function openRecipeModal(idMeal) {
             ${recipe.strArea ? `<span class="tag">${recipe.strArea}</span>` : ""}
           </div>
         </div>
-        <button id="modalFavBtn" class="btn ${fav ? "btn-fav active" : "btn-primary"}" style="z-index: 5;">
+        <button id="modalFavBtn" class="btn ${fav ? "btn-fav active" : "btn-primary"}">
           ${STAR_LOGO_SVG(fav)}
           ${fav ? "Saved in Favorites" : "Add to Favorites"}
         </button>

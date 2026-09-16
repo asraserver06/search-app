@@ -57,7 +57,8 @@ body {
 .app-container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 24px 20px;
+  padding: clamp(14px, 3vw, 24px) clamp(12px, 2.5vw, 20px);
+  width: 100%;
 }
 
 /* Utility Classes */
@@ -75,6 +76,7 @@ body {
   border: 1px solid transparent;
   cursor: pointer;
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
 .btn-primary {
@@ -107,6 +109,7 @@ body {
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 .btn-icon:hover {
   color: var(--text-main);
@@ -123,6 +126,7 @@ body {
   border-radius: var(--radius-full);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .badge-count {
@@ -140,9 +144,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 24px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--border-color);
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .brand {
@@ -161,24 +165,27 @@ body {
   align-items: center;
   justify-content: center;
   color: var(--accent-primary);
+  flex-shrink: 0;
 }
 
 .brand h1 {
   font-family: var(--font-heading);
-  font-size: 26px;
+  font-size: clamp(20px, 4vw, 26px);
   font-weight: 700;
   letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 /* Search Section */
 .search-section {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .search-box-wrapper {
   position: relative;
   max-width: 700px;
   margin: 0 auto 20px auto;
+  width: 100%;
 }
 
 .search-icon {
@@ -202,6 +209,7 @@ body {
   font-size: 16px;
   transition: all var(--transition-fast);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-overflow: ellipsis;
 }
 
 .search-box-wrapper input:focus {
@@ -221,26 +229,37 @@ body {
   transform: translateY(-50%);
 }
 
-/* Category Pills */
+/* Category Pills - FIXED FLEX SCROLL BUG */
 .category-pills {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   overflow-x: auto;
-  padding: 4px 4px 12px 4px;
-  justify-content: center;
+  padding: 6px 4px 12px 4px;
+  justify-content: flex-start;
   scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  width: 100%;
+}
+
+@media (min-width: 840px) {
+  .category-pills {
+    justify-content: center;
+  }
 }
 
 .pill {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-muted);
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: var(--radius-full);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
+  scroll-snap-align: start;
   transition: all var(--transition-fast);
 }
 
@@ -264,16 +283,18 @@ body {
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .results-header h2 {
   font-family: var(--font-heading);
-  font-size: 22px;
+  font-size: clamp(18px, 3.5vw, 22px);
   font-weight: 600;
 }
 
 .results-count {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 
@@ -281,7 +302,14 @@ body {
 .results-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 24px;
+  gap: 20px;
+}
+
+@media (max-width: 560px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 }
 
 /* Card Component */
@@ -295,10 +323,11 @@ body {
   transition: all var(--transition-normal);
   position: relative;
   box-shadow: var(--shadow-card);
+  width: 100%;
 }
 
 .card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   border-color: var(--border-highlight);
   box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.6), 0 0 15px var(--accent-glow);
 }
@@ -306,7 +335,7 @@ body {
 .card-media {
   position: relative;
   width: 100%;
-  padding-top: 66%; /* 3:2 Aspect ratio */
+  padding-top: 60%; /* 5:3 Aspect ratio */
   overflow: hidden;
 }
 
@@ -321,17 +350,17 @@ body {
 }
 
 .card:hover .card-media img {
-  transform: scale(1.08);
+  transform: scale(1.06);
 }
 
 .card-fav-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--text-main);
@@ -344,19 +373,19 @@ body {
 }
 
 .card-fav-btn:hover {
-  transform: scale(1.15);
-  background: rgba(15, 23, 42, 0.9);
+  transform: scale(1.1);
+  background: rgba(15, 23, 42, 0.95);
 }
 
 .card-fav-btn.active {
   color: var(--danger);
   fill: var(--danger);
   border-color: var(--danger);
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.2);
 }
 
 .card-content {
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -364,8 +393,9 @@ body {
 
 .card-tags {
   display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
 .tag {
@@ -377,15 +407,17 @@ body {
   border-radius: var(--radius-sm);
   background-color: rgba(255, 255, 255, 0.06);
   color: var(--accent-primary);
+  white-space: nowrap;
 }
 
 .card-title {
   font-family: var(--font-heading);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   margin-bottom: 8px;
-  line-height: 1.3;
+  line-height: 1.35;
   color: var(--text-main);
+  word-break: break-word;
 }
 
 .card-meta {
@@ -410,6 +442,7 @@ body {
   align-items: center;
   gap: 4px;
   transition: gap var(--transition-fast);
+  white-space: nowrap;
 }
 
 .card:hover .card-action-btn {
@@ -422,21 +455,21 @@ body {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   overflow: hidden;
-  height: 320px;
+  height: 300px;
   display: flex;
   flex-direction: column;
 }
 
 .skeleton-img {
   width: 100%;
-  height: 180px;
+  height: 170px;
   background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
 }
 
 .skeleton-text {
-  margin: 16px;
+  margin: 14px;
   height: 16px;
   border-radius: 4px;
   background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
@@ -455,16 +488,16 @@ body {
 /* Status States (Empty / Error) */
 .status-container {
   text-align: center;
-  padding: 60px 20px;
+  padding: clamp(30px, 6vw, 60px) 16px;
   background-color: var(--bg-card);
   border: 1px dashed var(--border-color);
   border-radius: var(--radius-lg);
-  margin: 30px 0;
+  margin: 20px 0;
 }
 
 .status-icon {
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   margin: 0 auto 16px auto;
   border-radius: 50%;
   display: flex;
@@ -489,7 +522,7 @@ body {
 .status-desc {
   font-size: 14px;
   color: var(--text-muted);
-  max-width: 400px;
+  max-width: 440px;
   margin: 0 auto 20px auto;
 }
 
@@ -498,11 +531,19 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 36px;
-  padding-top: 24px;
+  margin-top: 32px;
+  padding-top: 20px;
   border-top: 1px solid var(--border-color);
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .pagination-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .page-size-selector {
@@ -524,8 +565,10 @@ body {
 
 .pagination-controls {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .page-btn {
@@ -537,7 +580,7 @@ body {
   border: 1px solid var(--border-color);
   color: var(--text-main);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -561,7 +604,15 @@ body {
   cursor: not-allowed;
 }
 
-/* Modal Popup */
+.page-ellipsis {
+  color: var(--text-muted);
+  padding: 0 4px;
+  font-weight: 600;
+  font-size: 14px;
+  user-select: none;
+}
+
+/* Modal Popup - FULL RESPONSIVE OVERHAUL */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -574,7 +625,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: clamp(10px, 3vw, 24px);
   animation: fadeIn 0.25s ease-out;
 }
 
@@ -582,31 +633,39 @@ body {
   background-color: var(--bg-modal);
   border: 1px solid var(--border-highlight);
   border-radius: var(--radius-lg);
-  max-width: 900px;
+  max-width: 860px;
   width: 100%;
-  max-height: 90vh;
+  max-height: 92vh;
   overflow-y: auto;
   position: relative;
   box-shadow: var(--shadow-modal);
   scrollbar-width: thin;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Sticky close button so mobile users never get stuck scrolling down */
 .modal-close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
+  position: sticky;
+  top: 14px;
+  right: 14px;
+  float: right;
+  margin-bottom: -44px;
+  margin-right: 14px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: var(--text-main);
   cursor: pointer;
-  z-index: 10;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .modal-close-btn:hover {
@@ -615,10 +674,15 @@ body {
   transform: rotate(90deg);
 }
 
+.modal-body {
+  width: 100%;
+}
+
 .modal-hero {
   position: relative;
   width: 100%;
-  height: 320px;
+  min-height: 220px;
+  height: clamp(220px, 32vh, 340px);
 }
 
 .modal-hero img {
@@ -632,52 +696,73 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 40px 28px 20px 28px;
-  background: linear-gradient(to top, var(--bg-modal) 10%, transparent 100%);
+  padding: 30px 20px 16px 20px;
+  background: linear-gradient(to top, var(--bg-modal) 25%, rgba(19, 25, 38, 0.6) 75%, transparent 100%);
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .modal-hero-overlay {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 30px 16px 14px 16px;
+  }
+
+  .modal-hero-overlay #modalFavBtn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .modal-hero-title h2 {
   font-family: var(--font-heading);
-  font-size: 28px;
+  font-size: clamp(20px, 4vw, 26px);
   font-weight: 700;
   margin-bottom: 6px;
+  word-break: break-word;
+  line-height: 1.25;
 }
 
 .modal-hero-badges {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .modal-body-padding {
-  padding: 28px;
+  padding: clamp(16px, 3.5vw, 28px);
 }
 
 .modal-grid {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 32px;
-  margin-bottom: 28px;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
 @media (max-width: 768px) {
-  .modal-grid { grid-template-columns: 1fr; }
+  .modal-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
 
 .ingredients-box {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 20px;
+  padding: 16px 18px;
 }
 
 .ingredients-box h3, .instructions-box h3, .video-box h3 {
   font-family: var(--font-heading);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   color: var(--accent-primary);
 }
 
@@ -691,26 +776,32 @@ body {
   padding: 8px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   font-size: 14px;
+  gap: 12px;
 }
 
 .ingredient-name {
   color: var(--text-main);
+  word-break: break-word;
 }
 
 .ingredient-measure {
   color: var(--accent-primary);
   font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .instructions-text {
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 14px;
+  line-height: 1.75;
   color: #cbd5e1;
   white-space: pre-line;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .video-box {
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .video-container {
@@ -737,7 +828,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(4px);
   z-index: 900;
 }
@@ -746,8 +837,7 @@ body {
   position: fixed;
   top: 0;
   right: 0;
-  width: 380px;
-  max-width: 90vw;
+  width: min(380px, 92vw);
   height: 100vh;
   background-color: var(--bg-modal);
   border-left: 1px solid var(--border-color);
@@ -763,7 +853,7 @@ body {
 }
 
 .drawer-header {
-  padding: 20px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
@@ -772,55 +862,100 @@ body {
 
 .drawer-header h2 {
   font-family: var(--font-heading);
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .drawer-content {
-  padding: 20px;
+  padding: 16px 20px;
   overflow-y: auto;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .fav-item {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   background-color: var(--bg-card);
   padding: 10px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   cursor: pointer;
   transition: all var(--transition-fast);
+  min-width: 0;
 }
 
 .fav-item:hover {
   border-color: var(--accent-primary);
-  transform: translateX(-4px);
+  transform: translateX(-3px);
 }
 
 .fav-item img {
-  width: 60px;
-  height: 60px;
+  width: 54px;
+  height: 54px;
   border-radius: var(--radius-sm);
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .fav-item-info {
-  flex-grow: 1;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .fav-item-title {
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .fav-item-category {
   font-size: 12px;
   color: var(--text-muted);
+}
+
+/* Extra Responsive Media Query Adjustments */
+@media (max-width: 640px) {
+  .app-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .brand {
+    gap: 10px;
+  }
+  
+  .brand-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .brand-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 420px) {
+  .fav-btn-label {
+    display: none;
+  }
+  
+  .search-box-wrapper input {
+    padding: 14px 38px 14px 42px;
+    font-size: 14px;
+  }
+  
+  .search-icon {
+    left: 14px;
+    width: 18px;
+    height: 18px;
+  }
 }
 
 /* Animations */
